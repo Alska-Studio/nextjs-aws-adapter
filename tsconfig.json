@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "./dist",
+    "types": ["node"],
+    "rootDir": "./lib",
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": [
+    "./lib/**/*.ts", "./lib/**/*.mts"
+, "lib/server-handler/utilities/response.old"  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@agapi-development-tools/nextjs-aws-adapter",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "bin": {
+    "cli": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@sladg/imaginex-lambda": "0.18.2",
+    "serverless-http": "4.0.0",
+    "glob": "11.0.3",
+    "archiver": "7.0.1",
+    "commander": "14.0.2",
+    "envalid": "8.1.0",
+    "lambda-warmer": "2.3.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.157",
+    "@types/node": "22.12.0",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
+    "eslint": "9.38.0"
+  },
+  "peerDependencies": {
+    "@types/commander": "2.12.5",
+    "@types/archiver": "6.0.4",
+    "@types/node": "22.12.0",
+    "aws-cdk": "2.1031.0",
+    "aws-cdk-lib": "2.221.0",
+    "next": "15.5.6"
+  }
+}
