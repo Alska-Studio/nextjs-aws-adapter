@@ -1,9 +1,8 @@
 import { executeAsyncCmd } from '../utils';
 
-/* TODO: ESM support
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-*/
+
 const cdkExecutable = require.resolve('aws-cdk/bin/cdk');
 
 interface Props {

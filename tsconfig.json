@@ -5,7 +5,7 @@
     "module": "esnext",
     "outDir": "./dist",
     "types": ["node"],
-    "rootDir": "./lib",
+    "rootDir": "src",
     "declaration": true,
     "esModuleInterop": true,
     "moduleResolution": "bundler",
@@ -14,6 +14,6 @@
     "noEmit": true
   },
   "include": [
-    "./lib/**/*.ts", "./lib/**/*.mts"
-, "lib/server-handler/utilities/response.old"  ]
+    "src/**/*.ts", "src/**/*.mts"
+  ]
 }

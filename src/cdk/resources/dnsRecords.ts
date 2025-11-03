@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
 
-import { MappedDomain } from '../types';
+import { MappedDomain } from './types';
 
 export interface PrepareDomainProps {
   domains: string[]

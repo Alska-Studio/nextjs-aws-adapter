@@ -3,18 +3,14 @@
 import { Command } from 'commander';
 import path from 'path';
 
-/* TODO: ESM support
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-*/
-
 import packageJson from '../package.json';
-import { DEFAULT_MEMORY as IMAGE_LAMBDA_DEFAULT_MEMORY, DEFAULT_TIMEOUT as IMAGE_LAMBDA_DEFAULT_TIMEOUT } from './cdk/utils/imageLambda';
-import { deployHandler } from './cli/deploy';
-import { packHandler } from './cli/pack';
-import { removeHandler } from './cli/remove';
 import { wrapProcess } from './utils';
+
+import { packHandler } from './cli/pack';
+// import { deployHandler } from './cli/deploy';
+// import { removeHandler } from './cli/remove';
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const commandCwd = process.cwd();
 const program = new Command();
@@ -40,12 +36,12 @@ program
   .option(
     '--handlerPath <path>',
     'Path to custom handler to be used to handle ApiGw events. By default this is provided for you.',
-    path.resolve(__dirname, './server-handler/index.js')
+    path.resolve(__dirname, './handler/index.js')
   )
   .option(
     '--outputFolder <path>',
     'Path to folder which should be used for outputting bundled ZIP files for your Lambda. It will be cleared before every script run.',
-    path.resolve(commandCwd, './next.out')
+    path.resolve(commandCwd, './.next/nextjs-aws-adapter')
   )
   .action(async (options) => {
     console.log('Our config is: ', options);
@@ -54,6 +50,7 @@ program
     wrapProcess(packHandler({ commandCwd, handlerPath, outputFolder, publicFolder, standaloneFolder }));
   });
 
+/*
 program
   .command('deploy')
   .description('Deploy Next application via CDK')
@@ -123,5 +120,5 @@ program
 
     wrapProcess(removeHandler({ stackName, appPath, region, profile }));
   });
-
+*/
 program.parse(process.argv);

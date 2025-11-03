@@ -5,22 +5,13 @@ interface Props {
   appPath: string
   bootstrap: boolean
   region?: string
-  lambdaMemory?: number
-  lambdaTimeout?: number
-  lambdaRuntime?: string
-  imageLambdaMemory?: number
-  imageLambdaTimeout?: number
-  customApiDomain?: string
-  domainNames?: string
-  redirectFromApex?: boolean
   profile?: string
   hotswap: boolean
 }
 
-/* TODO: ESM support
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-*/
+
 const cdkExecutable = require.resolve('aws-cdk/bin/cdk');
 
 export const deployHandler = async ({
@@ -28,14 +19,6 @@ export const deployHandler = async ({
   appPath,
   bootstrap,
   region,
-  lambdaMemory,
-  lambdaTimeout,
-  lambdaRuntime,
-  imageLambdaMemory,
-  imageLambdaTimeout,
-  domainNames,
-  customApiDomain,
-  redirectFromApex,
   hotswap,
   profile
 }: Props) => {
@@ -54,15 +37,7 @@ export const deployHandler = async ({
 
   const variables = {
     STACK_NAME: stackName,
-    ...(region && { AWS_REGION: region }),
-    ...(lambdaMemory && { LAMBDA_MEMORY: lambdaMemory.toString() }),
-    ...(lambdaTimeout && { LAMBDA_TIMEOUT: lambdaTimeout.toString() }),
-    ...(lambdaRuntime && { LAMBDA_RUNTIME: lambdaRuntime.toString() }),
-    ...(imageLambdaMemory && { IMAGE_LAMBDA_MEMORY: imageLambdaMemory.toString() }),
-    ...(imageLambdaTimeout && { IMAGE_LAMBDA_TIMEOUT: imageLambdaTimeout.toString() }),
-    ...(domainNames && { DOMAIN_NAMES: domainNames }),
-    ...(customApiDomain && { CUSTOM_API_DOMAIN: customApiDomain }),
-    ...(redirectFromApex && { REDIRECT_FROM_APEX: redirectFromApex.toString() })
+    ...(region && { AWS_REGION: region })
   };
 
   if (bootstrap) {

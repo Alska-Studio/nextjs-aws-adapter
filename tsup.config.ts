@@ -2,28 +2,15 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig([
   {
-    entry: ['lib/index.ts'],
-    format: ['cjs'],
-    dts: { entry: 'lib/index.ts' },
+    entry: ['src/cli.ts'],
+    format: ['esm'],
     outDir: 'dist',
-    outExtension: () => ({ js: '.js' }),
+    outExtension: () => ({ js: '.mjs' }),
   },
   {
-    entry: ['lib/cli.ts'],
+    entry: ['src/handler/index.ts'], // NextJS and Payload cannot run ESM yet
     format: ['cjs'],
-    outDir: 'dist',
-    outExtension: () => ({ js: '.js' }),
-  },
-  {
-    entry: ['lib/cdk/app.ts'],
-    format: ['cjs'],
-    outDir: 'dist/cdk',
-    outExtension: () => ({ js: '.js' }),
-  },
-  {
-    entry: ['lib/server-handler/index.ts'],
-    format: ['cjs'],
-    outDir: 'dist/server-handler',
+    outDir: 'dist/handler',
     outExtension: () => ({ js: '.js' }),
   },
 ]);

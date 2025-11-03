@@ -1,9 +1,8 @@
-import os, { tmpdir } from 'node:os';
+import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { globSync } from 'glob';
 
-import { nextServerConfigRegex, nextServerConfigRegex13_3 } from '../consts';
 import { findObjectInFile, findPathToNestedFile, validateFolderExists, validatePublicFolderStructure, zipMultipleFoldersOrFiles } from '../utils';
 
 interface Props {
@@ -13,6 +12,9 @@ interface Props {
   outputFolder: string
   commandCwd: string
 }
+
+const NEXT_SERVER_CONFIG_REGEX = /(?<=conf: )(.*)(?=,)/;
+const NEXT_SERVER_CONFIG_REGEX13_3 = /(?<=nextConfig = )(.*)/;
 
 const NODE_MODULES_FOLDER = 'node_modules';
 const DEPENDENCIES_LAMBDA_FOLDER = 'nodejs/node_modules';
@@ -54,7 +56,6 @@ export const packHandler = async ({ handlerPath, outputFolder, publicFolder, sta
   validateFolderExists(standaloneFolder);
 
   console.log('standaloneFolder', standaloneFolder);
-
   const pathToNextOutput = findPathToNestedFile(NEXT_SERVER_FILE, standaloneFolder);
 
   // Dependencies layer configuration
@@ -144,7 +145,7 @@ export const packHandler = async ({ handlerPath, outputFolder, publicFolder, sta
     ]
   });
 
-  const nextConfig = findObjectInFile(generatedNextServerPath, [nextServerConfigRegex13_3, nextServerConfigRegex]);
+  const nextConfig = findObjectInFile(generatedNextServerPath, [NEXT_SERVER_CONFIG_REGEX13_3, NEXT_SERVER_CONFIG_REGEX]);
   const configPath = path.resolve(TMP_FOLDER, `./config.json_${Math.random()}`);
   fs.writeFileSync(configPath, nextConfig, 'utf-8');
 

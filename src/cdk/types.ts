@@ -1,41 +1,8 @@
-import { StackProps } from 'aws-cdk-lib';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { IHostedZone } from 'aws-cdk-lib/aws-route53';
-
-export interface CustomStackProps extends StackProps {
-  apigwServerPath: string
-  apigwImagePath: string
-  assetsZipPath: string
-  codeZipPath: string
-  dependenciesZipPath: string
-  imageHandlerZipPath: string
-  imageLayerZipPath: string
-  imageLambdaHash: string
-  customServerHandler: string
-  customImageHandler: string
-  lambdaTimeout: number
-  lambdaMemory: number
-  lambdaRuntime: Runtime
-  imageLambdaTimeout?: number
-  imageLambdaMemory?: number
-  redirectFromApex: boolean
-  customApiDomain?: string
-  certificateArn?: string
-  domainNames: string[]
-  awsProfile?: string
-}
-
-export interface MappedDomain {
-  recordName?: string
-  domain: string
-  zone: IHostedZone
-};
-
 import type { aws_wafv2 as wafV2, Duration } from 'aws-cdk-lib';
 import type { BundlingOptions } from 'aws-cdk-lib/aws-lambda-nodejs';
 import type * as lambda from 'aws-cdk-lib/aws-lambda';
 
-interface SvelteKitPropsFunctionAssociation {
+interface NextjsPropsFunctionAssociation {
   file: string;
   description: string;
   associateKeyValueStore?: string;
@@ -57,12 +24,8 @@ export type WafRule = wafV2.CfnWebACL.RuleProperty;
  * 8960             ~5 vCPUs           $0.14933           $1.49333     ❌
  * 10240            ~6 vCPUs           $0.17067           $1.70667     ❌
  */
-export interface NextjsStackProps {
+export interface NextjsProps {
   stackNamePrefix?: string;
-  manifest: {
-    assets: Set<string>;
-    prerendered?: Set<string>;
-  };
   vars: {
     stage: string;
     brand: string;
@@ -77,14 +40,14 @@ export interface NextjsStackProps {
       rules: WafRule[];
     };
     functionAssociations?: Partial<{
-      viewerRequest: SvelteKitPropsFunctionAssociation;
-      viewerResponse: SvelteKitPropsFunctionAssociation;
-      originRequest: SvelteKitPropsFunctionAssociation;
-      originResponse: SvelteKitPropsFunctionAssociation;
+      viewerRequest: NextjsPropsFunctionAssociation;
+      viewerResponse: NextjsPropsFunctionAssociation;
+      originRequest: NextjsPropsFunctionAssociation;
+      originResponse: NextjsPropsFunctionAssociation;
     }>;
   }>,
   app: {
-    entry: string;
+    entryDir: string;
     cookieAllowList?: string[];
     lambdaOptions?: Partial<{
       architecture: lambda.Architecture;

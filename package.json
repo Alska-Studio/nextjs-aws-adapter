@@ -3,14 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "license": "MIT",
-  "exports": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
+  "type": "module",
   "bin": {
-    "cli": "./dist/cli.js"
+    "cli": "./dist/cli.mjs"
+  },
+  "exports": {
+    "./cdk": {
+      "types": "./src/cdk/index.ts",
+      "import": "./src/cdk/index.ts"
+    },
+    "./handler": {
+      "types": "./dist/handler/index.d.ts",
+      "import": "./src/handler/index.mjs"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "./dist",
+    "./src"
   ],
   "scripts": {
     "prebuild": "rm -rf dist",
