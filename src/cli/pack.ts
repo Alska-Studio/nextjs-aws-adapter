@@ -3,6 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { globSync } from 'glob';
 
+import { colors as Colors } from '@agapi-development-tools/common-utilities';
 import { findObjectInFile, findPathToNestedFile, validateFolderExists, validatePublicFolderStructure, zipMultipleFoldersOrFiles } from '../utils';
 
 interface Props {
@@ -52,24 +53,16 @@ const buildDependenciesLayer = async (output: string, input: string) => {
 };
 
 export const packHandler = async ({ handlerPath, outputFolder, publicFolder, standaloneFolder, commandCwd }: Props) => {
+  const startTime = Date.now();
+
   validatePublicFolderStructure(publicFolder);
   validateFolderExists(standaloneFolder);
 
-  console.log('standaloneFolder', standaloneFolder);
   const pathToNextOutput = findPathToNestedFile(NEXT_SERVER_FILE, standaloneFolder);
 
   // Dependencies layer configuration
   const dependenciesOutputPath = path.resolve(outputFolder, DEPENDENCIES_ZIP_FILE);
   const nestedDependenciesOutputPath = dependenciesOutputPath.includes(pathToNextOutput) ? null : path.resolve(pathToNextOutput, NODE_MODULES_FOLDER);
-
-  console.log('Dependencies layer configuration',
-    {
-      pathToNextOutput,
-      DEPENDENCIES_LAMBDA_FOLDER,
-      dependenciesOutputPath,
-      nestedDependenciesOutputPath
-    }
-  );
 
   // Assets bundle configuration
   const buildIdPath = path.resolve(commandCwd, './.next/BUILD_ID');
@@ -77,27 +70,24 @@ export const packHandler = async ({ handlerPath, outputFolder, publicFolder, sta
   const generatedStaticRemapping = '_next/static';
   const assetsOutputPath = path.resolve(outputFolder, ASSETS_ZIP_FILE);
 
-  console.log('Assets bundle configuration',
-    {
-      buildIdPath,
-      generatedStaticContentPath,
-      generatedStaticRemapping,
-      assetsOutputPath
-    }
-  );
-
   // Code layer configuration
   const generatedNextServerPath = path.resolve(pathToNextOutput, NEXT_SERVER_FILE);
   const packageJsonPath = path.resolve(standaloneFolder, PACKAGE_JSON_FILE);
   const codeOutputPath = path.resolve(outputFolder, CODE_ZIP_FILE);
 
-  console.log('Code layer configuration',
-    {
-      generatedNextServerPath,
-      packageJsonPath,
-      codeOutputPath
-    }
-  );
+  // Display packing information
+  console.log(Colors.styledText()`
+NextJS-AWS-Adapter: 📦 Packing...
+‣ Configuration:
+  <softGreen>•</softGreen> <summerSky>public folder:</summerSky> <darkGrey>${path.relative(commandCwd, publicFolder)}</darkGrey>
+  <softGreen>•</softGreen> <summerSky>standalone folder:</summerSky> <darkGrey>${path.relative(commandCwd, standaloneFolder)}</darkGrey>
+  <softGreen>•</softGreen> <summerSky>handler path:</summerSky> <darkGrey>${path.relative(commandCwd, handlerPath)}</darkGrey>
+  <softGreen>•</softGreen> <summerSky>output folder:</summerSky> <darkGrey>${path.relative(commandCwd, outputFolder)}</darkGrey>
+
+‣ Generated ZIP files:
+  <softGreen>→</softGreen> <darkGrey>${path.relative(commandCwd, dependenciesOutputPath)}</darkGrey>
+  <softGreen>→</softGreen> <darkGrey>${path.relative(commandCwd, assetsOutputPath)}</darkGrey>
+  <softGreen>→</softGreen> <darkGrey>${path.relative(commandCwd, codeOutputPath)}</darkGrey>`);
 
   // Clean output directory before continuing
   fs.rmSync(outputFolder, { force: true, recursive: true });
@@ -178,5 +168,6 @@ export const packHandler = async ({ handlerPath, outputFolder, publicFolder, sta
     ]
   });
 
-  console.log('Your NextJS project was succefully prepared for Lambda.');
+  const endTime = Date.now();
+  console.log(Colors.styledText()`\n<softGreen>✓</softGreen> Build success in ${endTime - startTime}ms`);
 };

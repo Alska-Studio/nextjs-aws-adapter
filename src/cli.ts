@@ -44,9 +44,7 @@ program
     path.resolve(commandCwd, './.next/nextjs-aws-adapter')
   )
   .action(async (options) => {
-    console.log('Our config is: ', options);
     const { standaloneFolder, publicFolder, handlerPath, outputFolder } = options;
-
     wrapProcess(packHandler({ commandCwd, handlerPath, outputFolder, publicFolder, standaloneFolder }));
   });
 
@@ -69,7 +67,6 @@ program
   .option('--profile <name>', 'AWS profile to use with CDK.', undefined)
   .option('--hotswap', 'Hotswap stack to speedup deployment.', false)
   .action(async (options) => {
-    console.log('Our config is: ', options);
     const {
       stackName,
       appPath,
@@ -86,7 +83,6 @@ program
       hotswap,
       profile
     } = options;
-
     wrapProcess(
       deployHandler({
         stackName,
@@ -115,9 +111,7 @@ program
   .option('--region <region>', 'AWS region to deploy to.', undefined)
   .option('--profile <name>', 'AWS profile to use with CDK', undefined)
   .action(async (options) => {
-    console.log('Our config is: ', options);
     const { stackName, appPath, region, profile } = options;
-
     wrapProcess(removeHandler({ stackName, appPath, region, profile }));
   });
 */
