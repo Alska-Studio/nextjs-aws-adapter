@@ -1,3 +1,8 @@
+// Based on the following source:
+// https://stackoverflow.com/questions/75816952/typescript-omit-many-nested-properties
+// Posted by jcalz
+// Retrieved 05/11/2025
+
 export type RequiredProps<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export type DeepPartialExcept<T extends object, K extends NestedKeyOf<T>> = UnionToIntersection<PartialExceptUnion<T, K> | DeepPartial<T>>;

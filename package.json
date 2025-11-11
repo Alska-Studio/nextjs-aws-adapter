@@ -47,7 +47,7 @@
     "@types/commander": "2.12.5",
     "@types/archiver": "6.0.4",
     "@types/node": "22.12.0",
-    "aws-cdk": "2.1031.0",
+    "aws-cdk": "2.1031.1",
     "aws-cdk-lib": "2.221.0",
     "next": "15.5.6"
   }

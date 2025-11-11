@@ -1,15 +1,12 @@
 import type { NextjsProps } from '../types';
 import type { DeepRequiredExcept } from '../../types';
 
-import path from 'node:path';
-
 import * as cdk from 'aws-cdk-lib/aws-cloudfront';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { FunctionUrlOrigin, S3StaticWebsiteOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { IFunctionUrl } from 'aws-cdk-lib/aws-lambda';
 
 export const getKeyValueStores = (scope: Stack, props: NextjsProps) => {
   return Array.from(Object.values(props.cdn?.functionAssociations ?? {})
@@ -37,7 +34,7 @@ export const getViewerRequestFunction = (scope: Stack, props: DeepRequiredExcept
       filePath: props.cdn.functionAssociations.viewerRequest.file
     }),
     keyValueStore: keyValueStores[props.cdn.functionAssociations?.viewerResponse?.associateKeyValueStore ?? ''],
-    autoPublish: true,
+    autoPublish: true
   });
 
   return {
@@ -79,7 +76,7 @@ export const getViewerResponseFunction = (scope: Stack, props: DeepRequiredExcep
       filePath: props.cdn.functionAssociations.viewerResponse.file
     }),
     keyValueStore: keyValueStores[props.cdn.functionAssociations.viewerResponse.associateKeyValueStore],
-    autoPublish: true,
+    autoPublish: true
   });
 
   return {
@@ -102,7 +99,7 @@ export const getCloudfrontDistribution = (scope: Stack, resources: {
     functionAssociations,
     siteOriginRequestPolicy,
     sitePolicy,
-    wafStack,
+    wafStack
   } = resources;
 
   return new cdk.Distribution(scope, 'CloudFront', {
@@ -131,14 +128,14 @@ export const getCloudfrontDistribution = (scope: Stack, resources: {
         allowedMethods: cdk.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cdk.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         originRequestPolicy: cdk.OriginRequestPolicy.CORS_S3_ORIGIN,
-        responseHeadersPolicy: cdk.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
+        responseHeadersPolicy: cdk.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS
         // cachePolicy: cdk.CachePolicy.CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS
       },
       'assets/*': {
         origin: staticAssetsBucketOrigin,
         allowedMethods: cdk.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cdk.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        originRequestPolicy: cdk.OriginRequestPolicy.CORS_S3_ORIGIN,
+        originRequestPolicy: cdk.OriginRequestPolicy.CORS_S3_ORIGIN
         // cachePolicy: assetsCachePolicy
       }
     }

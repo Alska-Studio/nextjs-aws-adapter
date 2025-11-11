@@ -95,7 +95,7 @@ export class NextjsKit extends Stack {
       staticAssetsBucketOrigin,
       functionAssociations,
       siteOriginRequestPolicy: getOriginRequestPolicy(this, props),
-      sitePolicy,
+      sitePolicy
       // wafStack: this.dependencies.wafStack,
     }, props);
 
